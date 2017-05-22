@@ -1,0 +1,7 @@
+2017-05-22 16:15:08,704 - TestClassify.py[line:41] - INFO: 开始数据预处理模块, 模式为Frequency, 词频选择为0.500000
+2017-05-22 16:15:18,637 - Corpus.py[line:81] - WARNING: .\data\train\A_宾馆饭店\dali01.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 16:15:18,642 - Corpus.py[line:81] - WARNING: .\data\train\A_宾馆饭店\dali02.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 16:15:18,718 - Corpus.py[line:81] - WARNING: .\data\train\A_宾馆饭店\dali09.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 16:15:18,729 - Corpus.py[line:81] - WARNING: .\data\train\A_宾馆饭店\dali10.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 16:15:37,663 - Corpus.py[line:81] - WARNING: .\data\train\E_交通指引\dalli08.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 16:15:43,984 - Corpus.py[line:81] - WARNING: .\data\train\F_旅游服务\jinggangshan06.TXT UTF-8解码失败，请检查文本格式

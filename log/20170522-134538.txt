@@ -1,0 +1,11 @@
+2017-05-22 13:45:38,807 - TestClassify.py[line:41] - INFO: 开始数据预处理模块, 模式为Frequency, 词频选择为0.500000
+2017-05-22 13:45:48,951 - Corpus.py[line:81] - WARNING: C:\Users\51694\Downloads\TextClassify-master\TextClassify-master\data\train\A_宾馆饭店\dali01.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 13:45:48,961 - Corpus.py[line:81] - WARNING: C:\Users\51694\Downloads\TextClassify-master\TextClassify-master\data\train\A_宾馆饭店\dali02.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 13:45:49,203 - Corpus.py[line:81] - WARNING: C:\Users\51694\Downloads\TextClassify-master\TextClassify-master\data\train\A_宾馆饭店\dali09.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 13:45:49,209 - Corpus.py[line:81] - WARNING: C:\Users\51694\Downloads\TextClassify-master\TextClassify-master\data\train\A_宾馆饭店\dali10.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 13:46:04,602 - Corpus.py[line:81] - WARNING: C:\Users\51694\Downloads\TextClassify-master\TextClassify-master\data\train\E_交通指引\dalli08.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 13:46:07,652 - Corpus.py[line:81] - WARNING: C:\Users\51694\Downloads\TextClassify-master\TextClassify-master\data\train\F_旅游服务\jinggangshan06.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 13:46:23,664 - TestClassify.py[line:60] - INFO: 已向量化2421个训练文档, 80个测试文档, 共8类, 向量维度为24648
+2017-05-22 13:46:23,666 - TestClassify.py[line:64] - INFO: 数据预处理结束，共耗时 44.86 s
+2017-05-22 13:46:25,676 - TestClassify.py[line:74] - INFO: Logistic分类器训练结束，共耗时 2.01 s
+2017-05-22 13:46:25,698 - TestClassify.py[line:86] - INFO: 文本分类任务结束, 共测试80个测试数据, 耗时46.89 s, 正确率为91.250%

@@ -1,0 +1,5 @@
+2017-05-08 21:44:21,989 - TestClassify.py[line:41] - INFO: 开始数据预处理模块, 模式为Frequency, 词频选择为0.500000
+2017-05-08 21:44:38,868 - TestClassify.py[line:57] - INFO: 已向量化1848个训练文档, 99个测试文档, 向量维度为1449
+2017-05-08 21:44:38,869 - TestClassify.py[line:61] - INFO: 数据预处理结束，共耗时 16.88 s
+2017-05-08 21:44:39,036 - TestClassify.py[line:71] - INFO: Logistic分类器训练结束，共耗时 0.17 s
+2017-05-08 21:44:39,052 - TestClassify.py[line:83] - INFO: 文本分类任务结束, 共测试99个测试数据, 耗时17.06 s, 正确率为62.626%

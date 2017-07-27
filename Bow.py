@@ -10,7 +10,7 @@ class BagOfWords:
         self.dict = words_dict
         self.file_count = file_count
 
-    def bow_features(self, feature_model, frequency):
+    def bow_features(self, feature_model, frequency=0.5, number=1):
         """ 
             特征选择，根据需求选择特定词典作为文档特征, 参数feature_model用于设定特征选择方法
             Total: 将全部词作为训练特征
@@ -21,14 +21,20 @@ class BagOfWords:
             words = self.__total_words()
         elif feature_model == 'Frequency':
             words = self.__frequency_words(frequency)
-        else:
-            pass
+        elif feature_model == 'Frequent_number':
+            words = self.__frequentN_words(number)
         return self.dict_with_id(words)
 
     def __total_words(self):
         chosen_words = []
         for category in self.dict:
             chosen_words += list(self.dict[category].keys())
+        return set(chosen_words)
+
+    def __frequentN_words(self, number):
+        chosen_words = []
+        for category in self.dict:
+            chosen_words += [word for word in self.dict[category] if self.dict[category][word].count > number]
         return set(chosen_words)
 
     def __frequency_words(self, frequency):

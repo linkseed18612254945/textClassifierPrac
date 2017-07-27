@@ -1,10 +1,11 @@
 import os
 import pyltp
 import re
-import random
 import Bow
 import logging
 import numpy as np
+import math
+import nltk
 from collections import Counter
 
 
@@ -25,12 +26,12 @@ class WordItem:
     """ 词属性类，保存有一个词出现的文档号集合以及一个词在某类里出现的总频次 """
 
     def __init__(self):
-        self.file_ids = set()
+        self.file_ids = Counter()
         self.count = 0
         self.chi = 0
 
     def add_word(self, file_id):
-        self.file_ids.add(file_id)
+        self.file_ids.update([file_id])
         self.count += 1
 
     def __repr__(self):
@@ -44,19 +45,22 @@ class Corpus:
     通过file_vectors()方法得到向量化后的文档，然后可以进行后续的分类训练
     """
 
-    def __init__(self, path, file_end='txt'):
+    def __init__(self, path, text_language='ch', file_end='txt'):
         self.category_ids = {}
         self.dir_path = path
         self.file_end = '.' + file_end
         self.file_total_num = len(self.file_paths())
-        self.files = self.build_files()
+        if text_language == 'ch':
+            self.files = self.build_ch_files()
+        elif text_language == 'en':
+            self.files = self.build_en_files()
 
     def file_paths(self):
         """ 遍历指定目录，获取文档路径 """
         return [os.path.join(dirname, file) for (dirname, dirs, files) in os.walk(self.dir_path) for file in files
                 if file.lower().endswith(self.file_end)]
 
-    def build_files(self):
+    def build_ch_files(self):
         """ 遍历原始文档，进行分词词性标注，去除停用词等，创建FileItem类集合 """
         files = []
         category_id = 0
@@ -84,6 +88,29 @@ class Corpus:
         postagger.release()
         return files
 
+    def build_en_files(self):
+        files = []
+        category_id = 0
+        for ids, path in enumerate(self.file_paths()):
+            with open(path, 'r', encoding='utf-8') as f:
+                try:
+                    category = self.path2category(path)
+                    if category not in self.category_ids:
+                        self.category_ids[category] = category_id
+                        category_id += 1
+                    raw = self.process_line(f.read(), '')
+                    print(raw)
+                    words = nltk.word_tokenize(raw)
+                    words = [w for w in words if w.isalpha() and w not in nltk.corpus.stopwords.words('english')]
+                    print(words)
+                    pos = [x[1] for x in nltk.pos_tag(words)]
+                    file = FileItem(ids, category, words, pos)
+                    files.append(file)
+                except UnicodeDecodeError:
+                    logging.warning(path + ' UTF-8解码失败，请检查文本格式')
+                    continue
+        return files
+
     def build_bow(self):
         """ 利用已创建的FileItem对象集合创建语料库对应的词袋对象 """
         bow_dict = {}
@@ -98,31 +125,41 @@ class Corpus:
                 bow_dict[file.cate][word].add_word(file.id)
         return Bow.BagOfWords(bow_dict, bow_file_count)
 
-    def files_data(self, bow, file_num, feature_model='Total', frequency=0.5):
+    def files_data(self, bow, weigh_model='TF-IDF'):
         """ 获取向量化后的文档和对应类别标签数据，可以利用file_num参数指定文档数量，feature_mode指定向量化方法。该方法是提供训练使用的API。 """
-        random.shuffle(self.files)
-        files = self.files[:file_num]
-        bow_dict = bow.bow_features(feature_model, frequency)
+        files = self.files
         file_vectors = []
         file_labels = []
+
         for file in files:
-            file_vectors.append(self.file_to_vector(file, bow_dict))
+            file_vectors.append(self.__file_to_vector(file, bow, weigh_model))
             file_labels.append(self.category_ids[file.cate])
         return file_vectors, file_labels
 
-    @staticmethod
-    def file_to_vector(file, bow_dict):
+    def __word_weight(self, word, file, bow, weigh_model='AllOne'):
+        if weigh_model == 'AllOne':
+            return 1
+        elif weigh_model == 'TF':
+            return bow.dict[file.cate][word].file_ids[file.id]
+        elif weigh_model == 'TF-IDF':
+            tf = bow.dict[file.cate][word].file_ids[file.id] / len(file.words)
+            idf = math.log(self.file_total_num / len(bow.dict[file.cate][word].file_ids))
+            return tf * idf
+
+    def __file_to_vector(self, file, bow, weigh_model):
         """ 将文档对象向量化 """
-        file_vector = np.zeros(len(bow_dict))
+        feature_model = 'Frequent_number'
+        bow_feature = bow.bow_features(feature_model)
+        file_vector = np.zeros(len(bow_feature))
         for word in file.words:
-            if word in bow_dict:
-                file_vector[bow_dict[word]] += 1
+            if word in bow_feature:
+                file_vector[bow_feature[word]] = self.__word_weight(word, file, bow, weigh_model)
         return file_vector
 
     @staticmethod
-    def process_line(line):
+    def process_line(line, sep=' '):
         """ 去除原始文本中的特殊符号，提高分词准确度 """
-        return re.sub("]-·[\s+\.\!\/_,$%^*(+\"\':]+|[+——！，。？、~@#￥%……&*（）():\"=《\\n]+", " ", line)
+        return re.sub("]-·[\s+\.\!\/_,$%^*(+\"\':]+|[+——！，。？、~@#￥%……&*（）():\"=《\\n]+", sep, line)
 
     @staticmethod
     def remove_stop_words(words):

@@ -5,3 +5,7 @@
 2017-05-22 16:15:18,729 - Corpus.py[line:81] - WARNING: .\data\train\A_宾馆饭店\dali10.TXT UTF-8解码失败，请检查文本格式
 2017-05-22 16:15:37,663 - Corpus.py[line:81] - WARNING: .\data\train\E_交通指引\dalli08.TXT UTF-8解码失败，请检查文本格式
 2017-05-22 16:15:43,984 - Corpus.py[line:81] - WARNING: .\data\train\F_旅游服务\jinggangshan06.TXT UTF-8解码失败，请检查文本格式
+2017-05-22 16:16:09,225 - TestClassify.py[line:60] - INFO: 已向量化2421个训练文档, 80个测试文档, 共8类, 向量维度为24659
+2017-05-22 16:16:09,226 - TestClassify.py[line:64] - INFO: 数据预处理结束，共耗时 60.52 s
+2017-05-22 16:16:12,603 - TestClassify.py[line:74] - INFO: Logistic分类器训练结束，共耗时 3.38 s
+2017-05-22 16:16:12,804 - TestClassify.py[line:86] - INFO: 文本分类任务结束, 共测试80个测试数据, 耗时64.10 s, 正确率为91.250%
